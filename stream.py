@@ -122,17 +122,32 @@ ax.text(max_month, sales_by_month.max(), f"Max: Bulan {max_month}", ha="center",
 st.pyplot(fig)
 
 # Kota dengan volume transaksi tertinggi
-if "customer_id" in orders_df.columns and "customer_id" in customer_df.columns:
-    st.markdown("#### 3. Kota mana yang memiliki volume transaksi tertinggi?")
-    order_customer = pd.merge(orders_df, customer_df, on="customer_id", how="inner")
-    city_volume = order_customer["customer_city"].value_counts().head(10)
-    fig = px.bar(x=city_volume.index, y=city_volume.values, labels={"x": "Kota", "y": "Jumlah Transaksi"})
-    st.plotly_chart(fig)
+st.markdown("#### 3. Kota mana yang memiliki volume transaksi tertinggi?")
+city_sales = merged_df.groupby("customer_city")["order_id"].count().sort_values(ascending=False).head(10)
+fig, ax = plt.subplots(figsize=(10, 6))
+barplot = sns.barplot(x=city_sales.index, y=city_sales.values, ax=ax)
+ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
+ax.set_title("Top 10 Kota dengan Volume Transaksi Tertinggi")
+ax.set_xlabel("Kota")
+ax.set_ylabel("Jumlah Transaksi")
+max_value = city_sales.max()
+max_index = city_sales.idxmax()
+barplot.text(city_sales.index.get_loc(max_index), max_value + 100, f"{max_value}", ha='center', va='bottom', color='black', fontweight='bold')
+st.pyplot(fig)
 
 # Rata-rata waktu pengiriman
-if "order_delivered_customer_date" in orders_df.columns:
-    st.markdown("#### 4. Berapa rata-rata waktu pengiriman dari pembelian ke penerimaan?")
-    orders_df["order_delivered_customer_date"] = pd.to_datetime(orders_df["order_delivered_customer_date"], errors="coerce")
-    delivery_time = (orders_df["order_delivered_customer_date"] - orders_df["order_purchase_timestamp"]).dt.days
-    delivery_time = delivery_time.dropna()
-    st.write(f"Rata-rata waktu pengiriman: {delivery_time.mean():.2f} hari")
+st.markdown("#### 4. Berapa rata-rata waktu pengiriman dari pembelian ke penerimaan?")
+merged_df["order_delivered_customer_date"] = pd.to_datetime(merged_df["order_delivered_customer_date"], errors="coerce")
+merged_df["delivery_time"] = (merged_df["order_delivered_customer_date"] - merged_df["order_purchase_timestamp"]).dt.days
+avg_delivery_time = merged_df["delivery_time"].mean()
+st.write(f"Rata-rata waktu pengiriman: {avg_delivery_time:.2f} hari")
+
+merged_df["order_purchase_month"] = merged_df["order_purchase_timestamp"].dt.to_period("M")
+avg_delivery_time_per_month = merged_df.groupby("order_purchase_month")["delivery_time"].mean()
+fig, ax = plt.subplots(figsize=(12, 6))
+avg_delivery_time_per_month.plot(kind='line', marker='o', ax=ax)
+ax.set_title("Rata-rata Waktu Pengiriman per Bulan")
+ax.set_xlabel("Bulan")
+ax.set_ylabel("Rata-rata Waktu Pengiriman (hari)")
+ax.grid(True)
+st.pyplot(fig)
