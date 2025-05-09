@@ -17,13 +17,19 @@ def load_data():
     customer_url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/cleaned_customer.csv"
     geo_url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/cleaned_geolocation.csv"
     orders_url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/cleaned_orders.csv"
+    order_items_url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/order_items_dataset.csv"
+    products_url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/products_dataset.csv"
+    payments_url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/order_payments_dataset.csv"
 
     customer = pd.read_csv(customer_url)
     geolocation = pd.read_csv(geo_url)
     orders = pd.read_csv(orders_url)
-    return customer, geolocation, orders
+    order_items = pd.read_csv(order_items_url)
+    products = pd.read_csv(products_url)
+    payments = pd.read_csv(payments_url)
+    return customer, geolocation, orders, order_items, products, payments
 
-customer_df, geo_df, orders_df = load_data()
+customer_df, geo_df, orders_df, order_items_df, products_df, payments_df = load_data()
 
 # Display selected dataset
 if view == "Pelanggan":
@@ -88,11 +94,16 @@ if not orders_df.empty:
 # Insight Visualisasi
 st.subheader(" Insight Visualisasi ")
 
-# Produk paling banyak dibeli
-if "product_id" in orders_df.columns:
-    st.markdown("#### 1. Produk apa yang paling banyak dibeli pelanggan?")
-    most_sold = orders_df["product_id"].value_counts().head(10)
-    fig = px.bar(x=most_sold.index, y=most_sold.values, labels={"x": "Product ID", "y": "Jumlah Terjual"})
+# Produk paling banyak dibeli berdasarkan product_category_name
+st.markdown("#### 1. Produk apa yang paling banyak dibeli pelanggan?")
+merged_df = pd.merge(orders_df, order_items_df, on='order_id', how='left')
+merged_df = pd.merge(merged_df, products_df, on='product_id', how='left')
+merged_df = pd.merge(merged_df, payments_df, on='order_id', how='left')
+merged_df = pd.merge(merged_df, customer_df, on='customer_id', how='left')
+
+if "product_category_name" in merged_df.columns:
+    top_products = merged_df["product_category_name"].value_counts().head(10)
+    fig = px.bar(x=top_products.index, y=top_products.values, labels={"x": "Kategori Produk", "y": "Jumlah Pembelian"})
     st.plotly_chart(fig)
 
 # Waktu penjualan tertinggi
