@@ -17,9 +17,9 @@ def load_data():
     customer_url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/cleaned_customer.csv"
     geo_url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/cleaned_geolocation.csv"
     orders_url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/cleaned_orders.csv"
-    order_items_url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/order_items_dataset.csv"
-    products_url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/products_dataset.csv"
-    payments_url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/order_payments_dataset.csv"
+    order_items_url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/E-commerce-public-dataset/order_items_dataset.csv"
+    products_url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/E-commerce-public-dataset/products_dataset.csv"
+    payments_url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/E-commerce-public-dataset/order_payments_dataset.csv"
 
     customer = pd.read_csv(customer_url)
     geolocation = pd.read_csv(geo_url)
