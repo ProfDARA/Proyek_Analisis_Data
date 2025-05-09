@@ -106,13 +106,20 @@ if "product_category_name" in merged_df.columns:
     fig = px.bar(x=top_products.index, y=top_products.values, labels={"x": "Kategori Produk", "y": "Jumlah Pembelian"})
     st.plotly_chart(fig)
 
-# Waktu penjualan tertinggi
-if "order_purchase_timestamp" in orders_df.columns:
-    st.markdown("#### 2. Kapan waktu penjualan tertinggi terjadi?")
-    orders_df["order_date"] = orders_df["order_purchase_timestamp"].dt.date
-    order_daily = orders_df["order_date"].value_counts().sort_index()
-    fig = px.line(x=order_daily.index, y=order_daily.values, labels={"x": "Tanggal", "y": "Jumlah Pesanan"})
-    st.plotly_chart(fig)
+# Waktu penjualan tertinggi (berdasarkan bulan)
+st.markdown("#### 2. Kapan waktu penjualan tertinggi terjadi?")
+merged_df["order_purchase_timestamp"] = pd.to_datetime(merged_df["order_purchase_timestamp"])
+merged_df["order_purchase_month"] = merged_df["order_purchase_timestamp"].dt.month
+sales_by_month = merged_df["order_purchase_month"].value_counts().sort_index()
+max_month = sales_by_month.idxmax()
+
+fig, ax = plt.subplots(figsize=(10, 5))
+sns.lineplot(x=sales_by_month.index, y=sales_by_month.values, ax=ax)
+ax.set_title("Penjualan per Bulan")
+ax.set_xlabel("Bulan")
+ax.set_ylabel("Jumlah Penjualan")
+ax.text(max_month, sales_by_month.max(), f"Max: Bulan {max_month}", ha="center", va="bottom", color="red")
+st.pyplot(fig)
 
 # Kota dengan volume transaksi tertinggi
 if "customer_id" in orders_df.columns and "customer_id" in customer_df.columns:
