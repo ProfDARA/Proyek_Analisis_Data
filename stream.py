@@ -90,7 +90,7 @@ if not orders_df.empty:
     st.plotly_chart(fig)
 
 # Visualisasi & Jawaban Pertanyaan Umum
-st.subheader("📊 Insight Visualisasi & Jawaban Pertanyaan")
+st.subheader(" Insight Visualisasi ")
 
 # Produk paling banyak dibeli
 st.markdown("#### 1. Produk apa yang paling banyak dibeli pelanggan?")
