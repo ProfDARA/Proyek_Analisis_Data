@@ -30,7 +30,8 @@ st.markdown("""
 # Tampilkan Data
 st.subheader("Data Gabungan (merged_df.csv)")
 st.dataframe(merged_df.head())
-
+merged_df["geolocation_lat"] = pd.to_numeric(merged_df["geolocation_lat"], errors="coerce")
+merged_df["geolocation_lng"] = pd.to_numeric(merged_df["geolocation_lng"], errors="coerce")
 
 # Peta Sebaran Geolokasi
 st.markdown("### Peta Sebaran Geospasial Berdasarkan Merged Data")
