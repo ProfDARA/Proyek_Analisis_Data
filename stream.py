@@ -32,8 +32,13 @@ st.subheader("Data Gabungan (merged_df.csv)")
 st.dataframe(merged_df.head())
 
 # Peta Sebaran Geolokasi
+merged_df = load_data()
+merged_df.columns = merged_df.columns.str.strip()  # 
+
+# koordinat dikonversi ke float
 merged_df["geolocation_lat"] = pd.to_numeric(merged_df["geolocation_lat"], errors="coerce")
 merged_df["geolocation_lng"] = pd.to_numeric(merged_df["geolocation_lng"], errors="coerce")
+
 
 st.markdown("### Peta Sebaran Geospasial Berdasarkan Merged Data")
 
