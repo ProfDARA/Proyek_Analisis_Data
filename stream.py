@@ -31,13 +31,13 @@ st.markdown("""
 st.subheader("Data Gabungan (merged_df.csv)")
 st.dataframe(merged_df.head())
 
-# cek validasi data
-geo_df = merged_df.dropna(subset=["geolocation_lat", "geolocation_lng"])
-st.write(f"Number of valid geolocation rows: {len(geo_df)}")
-
 # Peta Sebaran Geolokasi
 merged_df = load_data()
 merged_df.columns = merged_df.columns.str.strip()  # 
+
+st.write("Contoh data geolokasi:")
+st.dataframe(merged_df[["geolocation_lat", "geolocation_lng"]].dropna().head())
+
 
 # koordinat bisa dikonversi ke float
 merged_df["geolocation_lat"] = pd.to_numeric(merged_df["geolocation_lat"], errors="coerce")
