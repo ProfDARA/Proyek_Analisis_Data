@@ -32,39 +32,43 @@ st.subheader("Data Gabungan (merged_df.csv)")
 st.dataframe(merged_df.head())
 
 # Peta Sebaran Geolokasi
+@st.cache_data
+
+def load_data():
+    url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/merged_df.csv"
+    df = pd.read_csv(url)
+    df.columns = df.columns.str.strip()
+    df["geolocation_lat"] = pd.to_numeric(df["geolocation_lat"], errors="coerce")
+    df["geolocation_lng"] = pd.to_numeric(df["geolocation_lng"], errors="coerce")
+    return df
+
 merged_df = load_data()
-merged_df.columns = merged_df.columns.str.strip()  # 
 
-st.write("Contoh data geolokasi:")
-st.dataframe(merged_df[["geolocation_lat", "geolocation_lng"]].dropna().head())
-
-
-# koordinat bisa dikonversi ke float
-merged_df["geolocation_lat"] = pd.to_numeric(merged_df["geolocation_lat"], errors="coerce")
-merged_df["geolocation_lng"] = pd.to_numeric(merged_df["geolocation_lng"], errors="coerce")
-
-
-st.markdown("### Peta Sebaran Geospasial Berdasarkan Merged Data")
-
+st.subheader("Tampilkan Sampel Koordinat Pelanggan")
 if "geolocation_lat" in merged_df.columns and "geolocation_lng" in merged_df.columns:
-    geo_df = merged_df.dropna(subset=["geolocation_lat", "geolocation_lng"])
-    if not geo_df.empty:
-        sample_size = min(1000, len(geo_df))
-        fig = px.scatter_mapbox(
-            geo_df.sample(n=sample_size, random_state=42),
-            lat="geolocation_lat",
-            lon="geolocation_lng",
-            zoom=3,
-            height=500,
-            hover_data=["customer_city", "customer_state", "order_id"]
-        )
-        fig.update_layout(mapbox_style="open-street-map")
-        fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
-        st.plotly_chart(fig)
-    else:
-        st.warning("Tidak ada data lokasi yang valid untuk ditampilkan.")
+    valid_geo = merged_df.dropna(subset=["geolocation_lat", "geolocation_lng"])
+    st.dataframe(valid_geo[["geolocation_lat", "geolocation_lng", "customer_city", "customer_state"]].head())
 else:
-    st.error("Kolom koordinat geospasial (`geolocation_lat`, `geolocation_lng`) tidak ditemukan di merged_df.")
+    st.error("Kolom 'geolocation_lat' dan 'geolocation_lng' tidak ditemukan dalam dataset.")
+
+st.markdown("### Peta Sebaran Lokasi Pelanggan")
+
+if not valid_geo.empty:
+    sample_size = min(1000, len(valid_geo))
+    fig = px.scatter_mapbox(
+        valid_geo.sample(n=sample_size, random_state=42),
+        lat="geolocation_lat",
+        lon="geolocation_lng",
+        hover_name="customer_city",
+        hover_data=["customer_state", "order_id"],
+        zoom=3,
+        height=600
+    )
+    fig.update_layout(mapbox_style="open-street-map")
+    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+    st.plotly_chart(fig, use_container_width=True)
+else:
+    st.warning("Tidak ada data koordinat yang valid untuk divisualisasikan.")
 
 # Jawaban Pertanyaan
 st.markdown("#### 1. Produk apa yang paling banyak dibeli pelanggan?")
