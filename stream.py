@@ -33,34 +33,22 @@ st.dataframe(merged_df.head())
 
 # Peta Sebaran Geolokasi
 merged_df = load_data()
-merged_df.columns = merged_df.columns.str.strip()  # 
 
-# koordinat dikonversi ke float
-merged_df["geolocation_lat"] = pd.to_numeric(merged_df["geolocation_lat"], errors="coerce")
-merged_df["geolocation_lng"] = pd.to_numeric(merged_df["geolocation_lng"], errors="coerce")
+# STRIP semua kolom dari spasi tak terlihat
+merged_df.columns = merged_df.columns.str.strip()
 
+# Tampilkan nama kolom untuk validasi
+st.write("✅ Kolom tersedia:", merged_df.columns.tolist())
 
-st.markdown("### Peta Sebaran Geospasial Berdasarkan Merged Data")
-
-if "geolocation_lat" in merged_df.columns and "geolocation_lng" in merged_df.columns:
-    geo_df = merged_df.dropna(subset=["geolocation_lat", "geolocation_lng"])
-    if not geo_df.empty:
-        sample_size = min(1000, len(geo_df))
-        fig = px.scatter_mapbox(
-            geo_df.sample(n=sample_size, random_state=42),
-            lat="geolocation_lat",
-            lon="geolocation_lng",
-            zoom=3,
-            height=500,
-            hover_data=["customer_city", "customer_state", "order_id"]
-        )
-        fig.update_layout(mapbox_style="open-street-map")
-        fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
-        st.plotly_chart(fig)
-    else:
-        st.warning("Tidak ada data lokasi yang valid untuk ditampilkan.")
+# Cek apakah kolom koordinat benar-benar ada
+required_cols = ["geolocation_lat", "geolocation_lng"]
+missing_cols = [col for col in required_cols if col not in merged_df.columns]
+if missing_cols:
+    st.error(f"❌ Kolom berikut tidak ditemukan: {missing_cols}")
 else:
-    st.error("Kolom koordinat geospasial (`geolocation_lat`, `geolocation_lng`) tidak ditemukan di merged_df.")
+    # Konversi koordinat ke numerik aman
+    merged_df["geolocation_lat"] = pd.to_numeric(merged_df["geolocation_lat"], errors="coerce")
+    merged_df["geolocation_lng"] = pd.to_numeric(merged_df["geolocation_lng"], errors="coerce")
 
 # Jawaban Pertanyaan
 st.markdown("#### 1. Produk apa yang paling banyak dibeli pelanggan?")
