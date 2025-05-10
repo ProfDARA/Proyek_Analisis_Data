@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 st.set_page_config(layout="wide")
 
 st.title("Dashboard Analisis Data E-Commerce Brazil")
-st.title("Dashboard Analisis Data E-Commerce Brazil")
 
 @st.cache_data
 
