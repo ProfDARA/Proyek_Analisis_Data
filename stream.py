@@ -7,9 +7,6 @@ import matplotlib.pyplot as plt
 # Title
 st.title("Dashboard Analisis Data E-Commerce")
 
-# Sidebar
-st.sidebar.title("Navigasi")
-
 # Load merged data
 @st.cache_data
 def load_data():
