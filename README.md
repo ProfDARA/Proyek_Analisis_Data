@@ -9,7 +9,6 @@ Dashboard interaktif berbasis Streamlit yang digunakan untuk menganalisis perila
   - Tren penjualan bulanan
   - Kota dengan transaksi terbanyak
   - Rata-rata waktu pengiriman
-- **Feedback Pengguna**: Formulir umpan balik untuk peningkatan fitur.
 - **Link Kontak GitHub**
 
 ##  Instalasi
