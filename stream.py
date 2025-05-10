@@ -31,22 +31,6 @@ st.markdown("""
 st.subheader("Data Gabungan (merged_df.csv)")
 st.dataframe(merged_df.head())
 
-# Histogram Data
-st.markdown("### Histogram Distribusi Fitur Penting")
-fig, ax = plt.subplots(figsize=(10, 8))
-merged_df[["customer_zip_code_prefix"]].hist(ax=ax, bins=20, edgecolor='black')
-plt.suptitle("Histogram untuk Dataset Customer", fontsize=16)
-st.pyplot(fig)
-
-fig, ax = plt.subplots(figsize=(10, 8))
-merged_df[["geolocation_lat", "geolocation_lng"]].hist(ax=ax, bins=20, edgecolor='black')
-plt.suptitle("Histogram untuk Dataset Geolocation", fontsize=16)
-st.pyplot(fig)
-
-fig, ax = plt.subplots(figsize=(10, 8))
-merged_df[["price", "freight_value"]].hist(ax=ax, bins=20, edgecolor='black')
-plt.suptitle("Histogram untuk Dataset Order Items", fontsize=16)
-st.pyplot(fig)
 
 # Peta Sebaran Geolokasi
 st.markdown("### Peta Sebaran Geospasial")
