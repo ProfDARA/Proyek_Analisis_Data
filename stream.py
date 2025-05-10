@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 st.set_page_config(layout="wide")
 
 st.title("Dashboard Analisis Data E-Commerce Brazil")
+st.title("Dashboard Analisis Data E-Commerce Brazil")
 
 @st.cache_data
 
@@ -124,11 +125,6 @@ with st.expander("Rata-rata Waktu Pengiriman"):
     ax.set_xlabel("Bulan")
     st.pyplot(fig)
 
-# Feedback interaktif
+# Kontak
 st.markdown("---")
-st.subheader("Feedback Pengguna")
-feedback = st.radio("Apakah insight yang ditampilkan bermanfaat?", ["Ya", "Tidak", "Butuh tambahan"])
-if feedback != "Ya":
-    saran = st.text_area("Berikan saran pengembangan dashboard")
-    if st.button("Kirim"):
-        st.success("Terima kasih atas masukannya!")
+st.markdown(" Kontak & Proyek Lainnya: [GitHub ProfDARA](https://github.com/ProfDARA)")
