@@ -33,10 +33,11 @@ st.dataframe(merged_df.head())
 
 
 # Peta Sebaran Geolokasi
-st.markdown("### Peta Sebaran Geospasial")
+st.markdown("### Peta Sebaran Geospasial Berdasarkan Merged Data")
 if "geolocation_lat" in merged_df.columns and "geolocation_lng" in merged_df.columns:
     fig = px.scatter_mapbox(merged_df.dropna(subset=["geolocation_lat", "geolocation_lng"]).sample(1000),
-                            lat="geolocation_lat", lon="geolocation_lng", zoom=2, height=500)
+                            lat="geolocation_lat", lon="geolocation_lng", zoom=3, height=500,
+                            hover_data=["customer_city", "customer_state", "order_id"])
     fig.update_layout(mapbox_style="open-street-map")
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
     st.plotly_chart(fig)
