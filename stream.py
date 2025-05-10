@@ -24,7 +24,7 @@ st.markdown("""
 - Berdasar grafik, Bulan penjualan tertinggi ada pada bulan 5 atau Mei
 - São Paulo sangat dominan dalam jumlah pelanggan dan lokasi dengan nilai 26114, sangat ideal untuk pusat distribusi.
 - Distribusi pelanggan menyebar tapi tidak merata → pendekatan logistik & pemasaran harus mempertimbangkan hal ini.
-- Dapat disimpulkan kalau rata-rata pengiriman adalah 2 minggu
+- Dapat disimpulkan kalau rata-rata pengiriman adalah 11 Hari
 """)
 
 # Tampilkan Data
@@ -91,4 +91,4 @@ ax.set_xlabel("Bulan")
 ax.set_ylabel("Rata-rata Waktu Pengiriman (hari)")
 ax.grid(True)
 st.pyplot(fig)
-st.info("Rata-rata waktu pengiriman adalah sekitar 2 minggu. Ini menandakan bahwa kecepatan pengiriman masih bisa dioptimalkan untuk meningkatkan kepuasan pelanggan, terutama jika dibandingkan dengan standar pengiriman yang lebih cepat di industri e-commerce.")
+st.info("Rata-rata waktu pengiriman adalah sekitar 12 Hari. Ini menandakan bahwa kecepatan pengiriman masih bisa dioptimalkan untuk meningkatkan kepuasan pelanggan, terutama jika dibandingkan dengan standar pengiriman yang lebih cepat di industri e-commerce.")
