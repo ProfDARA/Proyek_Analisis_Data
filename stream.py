@@ -31,35 +31,40 @@ st.markdown("""
 st.subheader("Data Gabungan (merged_df.csv)")
 st.dataframe(merged_df.head())
 
+# cek validasi data
+geo_df = merged_df.dropna(subset=["geolocation_lat", "geolocation_lng"])
+st.write(f"Number of valid geolocation rows: {len(geo_df)}")
+
 # Peta Sebaran Geolokasi
-# Interpolasi nilai hilang untuk kolom tanggal terkait pengiriman
-for col in ["order_approved_at", "order_delivered_carrier_date", "order_delivered_customer_date"]:
-    if col in orders.columns:
-        orders[col].interpolate(method="linear", limit_direction="both", inplace=True)
-        print(f"Interpolasi kolom {col} selesai.")
+merged_df = load_data()
+merged_df.columns = merged_df.columns.str.strip()  # 
 
-# Gabungan dataset yang dibutuhkan
-merged_df = (orders
-    .merge(order_items, on="order_id", how="left")
-    .merge(products, on="product_id", how="left")
-    .merge(order_payments, on="order_id", how="left")
-    .merge(customer, on="customer_id", how="left")
-)
+# koordinat bisa dikonversi ke float
+merged_df["geolocation_lat"] = pd.to_numeric(merged_df["geolocation_lat"], errors="coerce")
+merged_df["geolocation_lng"] = pd.to_numeric(merged_df["geolocation_lng"], errors="coerce")
 
-# Filter data pengiriman untuk menghindari nilai negatif atau tidak wajar
-merged_df = merged_df[
-    merged_df["delivery_time"].notnull() &
-    (merged_df["delivery_time"] >= 0) &
-    (merged_df["delivery_time"] <= 60)  # Asumsi pengiriman wajar <= 60 hari
-]
 
-# Analisis Geospasial
-import plotly.express as px
+st.markdown("### Peta Sebaran Geospasial Berdasarkan Merged Data")
 
-fig = px.scatter_mapbox(merged_df, lat="geolocation_lat", lon="geolocation_lng", zoom=2)
-fig.update_layout(mapbox_style="open-street-map")
-fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
-fig.show()
+if "geolocation_lat" in merged_df.columns and "geolocation_lng" in merged_df.columns:
+    geo_df = merged_df.dropna(subset=["geolocation_lat", "geolocation_lng"])
+    if not geo_df.empty:
+        sample_size = min(1000, len(geo_df))
+        fig = px.scatter_mapbox(
+            geo_df.sample(n=sample_size, random_state=42),
+            lat="geolocation_lat",
+            lon="geolocation_lng",
+            zoom=3,
+            height=500,
+            hover_data=["customer_city", "customer_state", "order_id"]
+        )
+        fig.update_layout(mapbox_style="open-street-map")
+        fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+        st.plotly_chart(fig)
+    else:
+        st.warning("Tidak ada data lokasi yang valid untuk ditampilkan.")
+else:
+    st.error("Kolom koordinat geospasial (`geolocation_lat`, `geolocation_lng`) tidak ditemukan di merged_df.")
 
 # Jawaban Pertanyaan
 st.markdown("#### 1. Produk apa yang paling banyak dibeli pelanggan?")
