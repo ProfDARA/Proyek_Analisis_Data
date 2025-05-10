@@ -32,21 +32,19 @@ st.subheader("Data Gabungan (merged_df.csv)")
 st.dataframe(merged_df.head())
 
 # Peta Sebaran Geolokasi
+# 1. Load data
 merged_df = load_data()
 
-# STRIP semua kolom dari spasi tak terlihat
+# 2. Bersihkan nama kolom (hapus spasi tersembunyi)
 merged_df.columns = merged_df.columns.str.strip()
 
-# Tampilkan nama kolom untuk validasi
-st.write("✅ Kolom tersedia:", merged_df.columns.tolist())
-
-# Cek apakah kolom koordinat benar-benar ada
+# 3. Validasi kolom penting
 required_cols = ["geolocation_lat", "geolocation_lng"]
 missing_cols = [col for col in required_cols if col not in merged_df.columns]
 if missing_cols:
-    st.error(f"❌ Kolom berikut tidak ditemukan: {missing_cols}")
+    st.error(f"❌ Kolom hilang: {missing_cols}")
 else:
-    # Konversi koordinat ke numerik aman
+    # 4. Konversi koordinat ke numerik
     merged_df["geolocation_lat"] = pd.to_numeric(merged_df["geolocation_lat"], errors="coerce")
     merged_df["geolocation_lng"] = pd.to_numeric(merged_df["geolocation_lng"], errors="coerce")
 
