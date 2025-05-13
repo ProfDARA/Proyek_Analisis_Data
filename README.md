@@ -1,21 +1,10 @@
-Dashboard interaktif berbasis Streamlit yang digunakan untuk menganalisis perilaku pelanggan dan performa penjualan pada data e-commerce Brazil.
+cara menjalankan;
+1.untuk lokal bisa dibuka terminal vscode lalu menginstall 
 
-## Fitur Utama
+pip install steamlit 
 
-- **Filter Interaktif**: Rentang tanggal, kategori produk, dan kota pelanggan.
-- **Peta Geolokasi**: Visualisasi lokasi pelanggan dengan koordinat geografis.
-- **Visualisasi Data**:
-  - Produk paling banyak dibeli
-  - Tren penjualan bulanan
-  - Kota dengan transaksi terbanyak
-  - Rata-rata waktu pengiriman
-- **Link Kontak GitHub**
+2.dan untuk menjalankan dashboard
 
-##  Instalasi
+cd dashboard
 
-bash
-pip install streamlit pandas plotly seaborn matplotlib
-
-
-##  Instalasi
-streamlit run nama_file_dashboard.py
+streamlit run stream.py
