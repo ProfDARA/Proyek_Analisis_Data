@@ -11,8 +11,9 @@ st.title("Dashboard Analisis Data E-Commerce Brazil")
 @st.cache_data
 
 def load_data():
-    #url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/merged_df.csv"
-    df = pd.read_csv("merged_df.csv")
+    url = "https://raw.githubusercontent.com/ProfDARA/Proyek_Analisis_Data/refs/heads/master/dashboard/merged_df.csv"
+    df = pd.read_csv("url")
+    #df = pd.read_csv("merged_df.csv")
     df.columns = df.columns.str.strip()
     df["geolocation_lat"] = pd.to_numeric(df["geolocation_lat"], errors="coerce")
     df["geolocation_lng"] = pd.to_numeric(df["geolocation_lng"], errors="coerce")
