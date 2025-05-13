@@ -1,1 +1,1 @@
-https://deployecommercebrazil.streamlit.app/
+https://dashboardecommercebrazil.streamlit.app/
